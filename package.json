@@ -4,7 +4,8 @@
   "description": "Node global variable leak detector",
   "version": "0.0.1",
   "repository": {
-    "url": ""
+      "type": "git"
+    , "url": "git://github.com/aheckmann/Gleak.git"
   },
   "main": "./index.js",
   "scripts": {
