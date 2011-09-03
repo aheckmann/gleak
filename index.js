@@ -5,7 +5,6 @@
 
 /**
  * Whitelisted globals.
- *
  * @api public
  */
 
@@ -22,13 +21,20 @@ exports.whitelist = [
 
 /**
  * Default format.
+ * @api public
  */
 
 exports.format = '\x1b[31mGleak!:\x1b[0m %s';
 
 /**
+ * Version.
+ * @api public
+ */
+
+exports.version = '0.0.1';
+
+/**
  * Detects global variable leaks.
- *
  * @api public
  */
 
@@ -53,6 +59,7 @@ exports.detect = function detect () {
 
 /**
  * Prints all gleaks to stderr.
+ * @api public
  */
 
 exports.print = function print () {
@@ -63,6 +70,7 @@ exports.print = function print () {
 
 /**
  * Express middleware.
+ * @api public
  */
 
 exports.middleware = function gleakMiddleware (stream, format) {
