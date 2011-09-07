@@ -73,6 +73,20 @@ exports.print = function print () {
 }
 
 /**
+ * Add items to the whitelist disallowing duplicates.
+ * @api public
+ */
+
+exports.ignore = function ignore () {
+  var i = arguments.length;
+  while (i--) {
+    if (~exports.whitelist.indexOf(arguments[i])) continue;
+    exports.whitelist.push(arguments[i]);
+  }
+  return this;
+}
+
+/**
  * Express middleware.
  * @api public
  */

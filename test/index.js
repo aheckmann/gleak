@@ -65,6 +65,17 @@ exports['unknown values can be whitelisted by passing strings'] = function () {
   delete global.ignoreme;
 }
 
+exports['#ignore'] = function () {
+  assert.equal('function', typeof gleak.ignore);
+}
+
+exports['ignore identical whitelisted values'] = function () {
+  var len = gleak.whitelist.length;
+  var an = 'another';
+  gleak.ignore('another', 'another', 'another', an);
+  assert.equal(len + 1, gleak.whitelist.length);
+}
+
 exports['print()'] = function () {
   var write = console.error;
   var times = 0;
