@@ -57,6 +57,14 @@ exports['detect()'] = function () {
   assert.equal("haha", gleak.detect()[0]);
 }
 
+exports['unknown values can be whitelisted by passing strings'] = function () {
+  ignoreme = 1;
+  assert.ok(~gleak.detect().indexOf('ignoreme'));
+  gleak.whitelist.push('ignoreme');
+  assert.ok(!~gleak.detect().indexOf('ignoreme'));
+  delete global.ignoreme;
+}
+
 exports['print()'] = function () {
   var write = console.error;
   var times = 0;
@@ -72,7 +80,6 @@ exports['print()'] = function () {
 }
 
 exports['test middleware'] = function (beforeExit) {
-
   var called = false;
   var req = {};
   var res = { send: function (x) { assert.equal(x, 'yes'); called = true; }};

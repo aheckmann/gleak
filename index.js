@@ -45,10 +45,14 @@ exports.detect = function detect () {
   Object.keys(global).forEach(function (key) {
     var w = whitelist.length
       , bad = true
+      , white
 
-    while (w--) if (global[key] === whitelist[w]) {
-      bad = false;
-      break;
+    while (w--) {
+      white = whitelist[w];
+      if (global[key] === white || 'string' === typeof white && key === white) {
+        bad = false;
+        break;
+      }
     }
 
     if (bad) ret.push(key);
