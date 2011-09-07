@@ -126,6 +126,25 @@ Gleak.prototype.detect = function detect () {
 };
 
 /**
+ * Return only new leaks since the last time `detectNew`
+ * was run.
+ * @api public
+ */
+
+Gleak.prototype.detectNew = function detectNew () {
+  var found = this.found || (this.found = []);
+  var ret = [];
+
+  this.detect().forEach(function (leak) {
+    if (~found.indexOf(leak)) return;
+    found.push(leak);
+    ret.push(leak);
+  });
+
+  return ret;
+}
+
+/**
  * Prints all gleaks to stderr.
  * @api public
  */
