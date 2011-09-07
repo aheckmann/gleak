@@ -3,91 +3,137 @@ var assert = require('assert')
 var express = require('express')
 var gleak = require('../index')
 
+exports['version exists'] = function () {
+  assert.equal('string', typeof gleak.version);
+}
+
+exports['middleware exists'] = function () {
+  assert.equal('function', typeof gleak.middleware);
+}
+
+exports['gleak is a function'] = function () {
+  assert.equal('function', typeof gleak);
+}
+
 exports['default format is correct'] = function () {
-  assert.equal('\x1b[31mGleak!:\x1b[0m %s', gleak.format);
+  var g = gleak();
+  assert.equal('\x1b[31mGleak!:\x1b[0m %s', g.format);
 }
 
 exports['whitelist is an array'] = function () {
-  assert.ok(Array.isArray(gleak.whitelist));
+  var g = gleak();
+  assert.ok(Array.isArray(g.whitelist));
 }
 
 exports['setTimeout is a default'] = function () {
-  assert.ok(~gleak.whitelist.indexOf(setTimeout));
+  var g = gleak();
+  assert.ok(~g.whitelist.indexOf(setTimeout));
 };
 
 exports['setInterval is a default'] = function () {
-  assert.ok(~gleak.whitelist.indexOf(setInterval));
+  var g = gleak();
+  assert.ok(~g.whitelist.indexOf(setInterval));
 };
 exports['clearTimeout is a default'] = function () {
-  assert.ok(~gleak.whitelist.indexOf(clearTimeout));
+  var g = gleak();
+  assert.ok(~g.whitelist.indexOf(clearTimeout));
 };
 exports['clearInterval is a default'] = function () {
-assert.ok(~gleak.whitelist.indexOf(clearInterval));
+  var g = gleak();
+  assert.ok(~g.whitelist.indexOf(clearInterval));
 };
 exports['console is a default'] = function () {
-  assert.ok(~gleak.whitelist.indexOf(console));
+  var g = gleak();
+  assert.ok(~g.whitelist.indexOf(console));
 };
 exports['Buffer is a default'] = function () {
-  assert.ok(~gleak.whitelist.indexOf(Buffer));
+  var g = gleak();
+  assert.ok(~g.whitelist.indexOf(Buffer));
 };
 exports['process is a default'] = function () {
-  assert.ok(~gleak.whitelist.indexOf(process));
+  var g = gleak();
+  assert.ok(~g.whitelist.indexOf(process));
 };
 exports['global is a default'] = function () {
-  assert.ok(~gleak.whitelist.indexOf(global));
+  var g = gleak();
+  assert.ok(~g.whitelist.indexOf(global));
 };
 
 exports['whitelist is mutable'] = function () {
-  var i = gleak.whitelist.push(assert);
-  assert.ok(~gleak.whitelist.indexOf(assert));
-  gleak.whitelist.splice(i-1, 1);
-  assert.ok(!~gleak.whitelist.indexOf(assert));
+  var g = gleak();
+  var i = g.whitelist.push(assert);
+  assert.ok(~g.whitelist.indexOf(assert));
+  g.whitelist.splice(i-1, 1);
+  assert.ok(!~g.whitelist.indexOf(assert));
 }
 
-exports['gleak.detect is a function'] = function () {
-  assert.ok('function' === typeof gleak.detect);
+exports['#detect is a function'] = function () {
+  var g = gleak();
+  assert.ok('function' === typeof g.detect);
 }
 
 exports['detect()'] = function () {
-  var found = gleak.detect();
+  var g = gleak();
+  var found = g.detect();
   assert.ok(Array.isArray(found));
   assert.ok(0 === found.length);
   haha = "lol"
-  assert.ok(1 === gleak.detect().length);
-  assert.equal("haha", gleak.detect()[0]);
+  assert.ok(1 === g.detect().length);
+  assert.equal("haha", g.detect()[0]);
 }
 
 exports['unknown values can be whitelisted by passing strings'] = function () {
+  var g = gleak();
   ignoreme = 1;
-  assert.ok(~gleak.detect().indexOf('ignoreme'));
-  gleak.whitelist.push('ignoreme');
-  assert.ok(!~gleak.detect().indexOf('ignoreme'));
+  assert.ok(~g.detect().indexOf('ignoreme'));
+  g.whitelist.push('ignoreme');
+  assert.ok(!~g.detect().indexOf('ignoreme'));
   delete global.ignoreme;
 }
 
 exports['#ignore'] = function () {
-  assert.equal('function', typeof gleak.ignore);
+  var g = gleak();
+  assert.equal('function', typeof g.ignore);
 }
 
 exports['ignore identical whitelisted values'] = function () {
-  var len = gleak.whitelist.length;
+  var g = gleak();
+  var len = g.whitelist.length;
   var an = 'another';
-  gleak.ignore('another', 'another', 'another', an);
-  assert.equal(len + 1, gleak.whitelist.length);
+  g.ignore('another', 'another', 'another', an);
+  assert.equal(len + 1, g.whitelist.length);
 }
 
-exports['print()'] = function () {
+exports['#print'] = function () {
+  var g = gleak();
   var write = console.error;
   var times = 0;
   haha = "heh";
   console.error = function (format, item) {
-    assert.equal(gleak.format, format);
+    assert.equal(g.format, format);
     assert.equal("haha", item);
     ++times;
   }
-  gleak.print();
+  g.print();
   console.error = write;
   assert.equal(1, times);
+}
+
+exports['whitelists are seperate from other instances'] = function () {
+  var g1 = gleak()
+    , g2 = gleak();
+
+  g1.ignore('the', 'bad');
+  assert.ok(~g1.whitelist.indexOf('the'));
+  assert.ok(!~g2.whitelist.indexOf('the'));
+}
+
+exports['formats are seperate from other instances'] = function () {
+  var g1 = gleak()
+    , g2 = gleak();
+
+  g1.format = "different %s";
+  assert.ok(~g1.format !== g1.format);
 }
 
 exports['test middleware'] = function (beforeExit) {

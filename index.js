@@ -1,14 +1,85 @@
 
 /**
  * Gleak - detect global var leaks.
+ * @api public
  */
+
+module.exports = exports = function gleak () {
+  return new Gleak;
+}
+
+/**
+ * Version.
+ * @api public
+ */
+
+exports.version = '0.0.2';
+
+/**
+ * Express middleware.
+ * @api public
+ */
+
+exports.middleware = function gleakMiddleware (stream, format) {
+  var g = new Gleak;
+
+  if (!format) {
+    switch (typeof stream) {
+      case 'string':
+        format = stream;
+        stream = process.stderr;
+        break;
+      case 'undefined':
+        format = g.format;
+        stream = process.stderr;
+        break;
+      default:
+        format = g.format;
+    }
+  }
+
+  var known = [];
+  setTimeout(print, 1000);
+
+  function print () {
+    g.detect().forEach(function (leak) {
+      if (~known.indexOf(leak)) return;
+      known.push(leak);
+      stream.write(format.replace(/%s/, leak) + '\n');
+    });
+  }
+
+  return function gleakMiddleware (req, res, next) {
+    if (res._gleak) return next();
+    res._gleak = true;
+
+    var send = res.send;
+
+    res.send = function () {
+      res.send = send;
+      res.send.apply(res, arguments);
+      print();
+    }
+
+    next();
+  }
+}
+
+/**
+ * Gleak constructor
+ * @api private
+ */
+
+function Gleak () {
+  this.whitelist = this.whitelist.slice();
+}
 
 /**
  * Whitelisted globals.
  * @api public
  */
 
-exports.whitelist = [
+Gleak.prototype.whitelist = [
     setTimeout
   , setInterval
   , clearTimeout
@@ -24,22 +95,15 @@ exports.whitelist = [
  * @api public
  */
 
-exports.format = '\x1b[31mGleak!:\x1b[0m %s';
-
-/**
- * Version.
- * @api public
- */
-
-exports.version = '0.0.2';
+Gleak.prototype.format = '\x1b[31mGleak!:\x1b[0m %s';
 
 /**
  * Detects global variable leaks.
  * @api public
  */
 
-exports.detect = function detect () {
-  var whitelist = exports.whitelist
+Gleak.prototype.detect = function detect () {
+  var whitelist = this.whitelist
     , ret = []
 
   Object.keys(global).forEach(function (key) {
@@ -66,9 +130,10 @@ exports.detect = function detect () {
  * @api public
  */
 
-exports.print = function print () {
-  exports.detect().forEach(function (leak) {
-    console.error(exports.format, leak);
+Gleak.prototype.print = function print () {
+  var format = this.format;
+  this.detect().forEach(function (leak) {
+    console.error(format, leak);
   });
 }
 
@@ -77,60 +142,12 @@ exports.print = function print () {
  * @api public
  */
 
-exports.ignore = function ignore () {
+Gleak.prototype.ignore = function ignore () {
   var i = arguments.length;
   while (i--) {
-    if (~exports.whitelist.indexOf(arguments[i])) continue;
-    exports.whitelist.push(arguments[i]);
+    if (~this.whitelist.indexOf(arguments[i])) continue;
+    this.whitelist.push(arguments[i]);
   }
   return this;
-}
-
-/**
- * Express middleware.
- * @api public
- */
-
-exports.middleware = function gleakMiddleware (stream, format) {
-  if (!format) {
-    switch (typeof stream) {
-      case 'string':
-        format = stream;
-        stream = process.stderr;
-        break;
-      case 'undefined':
-        format = exports.format;
-        stream = process.stderr;
-        break;
-      default:
-        format = exports.format;
-    }
-  }
-
-  var known = [];
-  setTimeout(print, 1000);
-
-  function print () {
-    exports.detect().forEach(function (leak) {
-      if (~known.indexOf(leak)) return;
-      known.push(leak);
-      stream.write(format.replace(/%s/, leak) + '\n');
-    });
-  }
-
-  return function gleakMiddleware (req, res, next) {
-    if (res._gleak) return next();
-    res._gleak = true;
-
-    var send = res.send;
-
-    res.send = function () {
-      res.send = send;
-      res.send.apply(res, arguments);
-      print();
-    }
-
-    next();
-  }
 }
 
