@@ -31,7 +31,7 @@ exports.format = '\x1b[31mGleak!:\x1b[0m %s';
  * @api public
  */
 
-exports.version = '0.0.1';
+exports.version = '0.0.2';
 
 /**
  * Detects global variable leaks.
