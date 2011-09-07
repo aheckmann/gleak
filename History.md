@@ -1,4 +1,10 @@
 
+0.1.0 / 09-06-2011
+==================
+
+  * added; #ignore method
+  * added; multiple instance support
+
 0.0.2 / 09-06-2011
 ==================
 

@@ -13,7 +13,7 @@ module.exports = exports = function gleak () {
  * @api public
  */
 
-exports.version = '0.0.2';
+exports.version = '0.1.0';
 
 /**
  * Express middleware.
