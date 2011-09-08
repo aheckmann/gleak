@@ -31,12 +31,12 @@ You can push to it or blow it away completely with your own list too.
 
 Changes to your whitelists do not impact any global settings. For example:
 
-  var gleak = require('gleak');
-  var g1 = gleak();
-  var g2 = gleak();
+    var gleak = require('gleak');
+    var g1 = gleak();
+    var g2 = gleak();
 
-  g1.ignore(myglobal);
-  g2.whitelist.indexOf(myglobal) === -1;
+    g1.ignore(myglobal);
+    g2.whitelist.indexOf(myglobal) === -1;
 
 `g2` does not inherit changes to `g1`s whitelist.
 
