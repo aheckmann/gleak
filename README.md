@@ -2,8 +2,9 @@
 Global variable leak detection for Node.js
 
     var gleak = require('gleak');
+    var detector = gleak();
 
-    gleak.detect().forEach(function (name) {
+    detector.detect().forEach(function (name) {
       console.warn('found global leak: %s', name);
     });
 
@@ -16,18 +17,59 @@ your tests, after HTTP requests, and after you brush your teeth.
 Gleak comes configured for Node.js and will ignore built-ins by default
 but you can configure it however your like:
 
-    var gleak = require('gleak');
-    gleak.whitelist.push(app, db);
+    var gleak = require('gleak')();
+    gleak.ignore(app, db);
 
-`gleak.whitelist` is an array that holds all globals we want to ignore.
-Push to it or blow it away completely with your own list.
+The `gleak.ignore` method allows us to add globals we want to ignore
+while safely ignoring duplicates.
 
+`gleak.whitelist` is an array that holds all globals we are ignoring.
+You can push to it or blow it away completely with your own list too.
+
+    var gleak = require('gleak')();
     gleak.whitelist = [dnode, cluster];
+
+Changes to your whitelists do not impact any global settings. For example:
+
+  var gleak = require('gleak');
+  var g1 = gleak();
+  var g2 = gleak();
+
+  g1.ignore(myglobal);
+  g2.whitelist.indexOf(myglobal) === -1;
+
+`g2` does not inherit changes to `g1`s whitelist.
+
+## Printable
 
 If you don't want anything fancy and want to quickly dump all
 global leaks to your console, just call `print()`.
 
+    var gleak = require('gleak')();
     gleak.print(); // prints "Gleak!: leakedVarName"
+
+## Detectable
+
+As demonstrated, gleak comes with the `detect` method which returns
+an array of all found variable leaks.
+
+    var detector = require('gleak')();
+
+    detector.detect().forEach(function (name) {
+      console.warn('found global leak: %s', name);
+    });
+
+Often times we want to run the detector many times, progressively
+checking for any new leaks that occurred since we last checked. In
+this scenario we can utilize the `detectNew` method.
+
+    var detector = require('gleak')();
+
+    x = 1;
+    detector.detectNew(); // ['x']
+    detector.detectNew(); // []
+    y = 3;
+    detector.detectNew(); // ['y']
 
 ## Expressable
 
