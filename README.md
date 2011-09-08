@@ -1,8 +1,7 @@
 # Gleak
 Global variable leak detection for Node.js
 
-    var gleak = require('gleak');
-    var detector = gleak();
+    var detector = require('gleak')();
 
     detector.detect().forEach(function (name) {
       console.warn('found global leak: %s', name);
@@ -11,6 +10,23 @@ Global variable leak detection for Node.js
 Global variable leaks in javascript can bite you when you least
 expect it. Do something about it now and run this module after
 your tests, after HTTP requests, and after you brush your teeth.
+
+## Detectable
+
+As demonstrated, gleak comes with the `detect` method which returns
+an array of all found variable leaks.
+
+Often times we want to run the detector many times, progressively
+checking for any new leaks that occurred since we last checked. In
+this scenario we can utilize the `detectNew` method.
+
+    var detector = require('gleak')();
+
+    x = 1;
+    detector.detectNew(); // ['x']
+    detector.detectNew(); // []
+    y = 3;
+    detector.detectNew(); // ['y']
 
 ## Configurable:
 
@@ -47,29 +63,6 @@ global leaks to your console, just call `print()`.
 
     var gleak = require('gleak')();
     gleak.print(); // prints "Gleak!: leakedVarName"
-
-## Detectable
-
-As demonstrated, gleak comes with the `detect` method which returns
-an array of all found variable leaks.
-
-    var detector = require('gleak')();
-
-    detector.detect().forEach(function (name) {
-      console.warn('found global leak: %s', name);
-    });
-
-Often times we want to run the detector many times, progressively
-checking for any new leaks that occurred since we last checked. In
-this scenario we can utilize the `detectNew` method.
-
-    var detector = require('gleak')();
-
-    x = 1;
-    detector.detectNew(); // ['x']
-    detector.detectNew(); // []
-    y = 3;
-    detector.detectNew(); // ['y']
 
 ## Expressable
 
