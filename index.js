@@ -38,13 +38,10 @@ exports.middleware = function gleakMiddleware (stream, format) {
     }
   }
 
-  var known = [];
   setTimeout(print, 1000);
 
   function print () {
-    g.detect().forEach(function (leak) {
-      if (~known.indexOf(leak)) return;
-      known.push(leak);
+    g.detectNew().forEach(function (leak) {
       stream.write(format.replace(/%s/, leak) + '\n');
     });
   }
