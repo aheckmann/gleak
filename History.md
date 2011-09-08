@@ -1,4 +1,10 @@
 
+0.1.2 / 09-08-2011
+==================
+
+  * changed; utilize detectNew in middleware
+  * updated; docs
+
 0.1.1 / 09-07-2011
 ==================
 
