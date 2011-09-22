@@ -1,4 +1,9 @@
 
+0.1.3 / 09-22-2011
+==================
+
+  * use old school node engine format in package.json
+
 0.1.2 / 09-08-2011
 ==================
 
