@@ -12,11 +12,11 @@
     "test": "make test"
   },
   "engines": {
-    "node": ">=v0.4.0"
+    "node": ">=0.4.0"
   },
   "dependencies": {},
   "devDependencies": {
-      "express": "~v2.0.0"
-    , "expresso": "v0.7.5"
+      "express": ">=2.0.0"
+    , "expresso": "0.7.5"
   }
 }
