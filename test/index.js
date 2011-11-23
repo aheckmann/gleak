@@ -78,7 +78,7 @@ exports['detect()'] = function () {
   assert.ok(Array.isArray(found));
   assert.ok(0 === found.length);
   haha = "lol"
-  assert.ok(1 === g.detect().length);
+  assert.equal(1, g.detect().length);
   assert.equal("haha", g.detect()[0]);
 }
 
