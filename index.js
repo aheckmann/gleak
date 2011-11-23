@@ -92,7 +92,7 @@ Gleak.prototype.whitelist = [
 
 // check for new globals in >= v0.5x
 var version = process.version.replace(/^v/, '').split('.');
-if ('0' === version[0] && version[1] > 4) {
+if ('0' === version[0] && version[1] > 4 && process.version !== 'v0.5.0-pre') {
   Gleak.prototype.whitelist.push(
     ArrayBuffer
   , Int8Array
