@@ -13,7 +13,9 @@ module.exports = exports = function gleak () {
  * @api public
  */
 
-exports.version = '0.2.2';
+exports.version = JSON.parse(
+  require('fs').readFileSync(__dirname + '/package.json', 'utf8')
+).version;
 
 /**
  * Express middleware.
