@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Gleak by aheckmann</title>
+    
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Gleak</h1>
+        <p>Global variable leak detection for Node.js</p>
+        <p class="view"><a href="https://github.com/aheckmann/gleak">View the Project on GitHub <small>aheckmann/gleak</small></a></p>
+        <ul>
+          <li><a href="https://github.com/aheckmann/gleak/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/aheckmann/gleak/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/aheckmann/gleak">Fork On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><a href="http://travis-ci.org/aheckmann/gleak"><img src="https://secure.travis-ci.org/aheckmann/gleak.png" alt="Build Status"></a></p>
+
+<pre><code>var detector = require('gleak')();
+
+detector.detect().forEach(function (name) {
+  console.warn('found global leak: %s', name);
+});
+</code></pre>
+
+<p>Global variable leaks in javascript can bite you when you least
+expect it. Do something about it now and run this module after
+your tests, after HTTP requests, and after you brush your teeth.</p>
+
+<h2>Detectable</h2>
+
+<p>As demonstrated, gleak comes with the <code>detect</code> method which returns
+an array of all found variable leaks.</p>
+
+<p>Often times we want to run the detector many times, progressively
+checking for any new leaks that occurred since we last checked. In
+this scenario we can utilize the <code>detectNew</code> method.</p>
+
+<pre><code>var detector = require('gleak')();
+
+x = 1;
+detector.detectNew(); // ['x']
+detector.detectNew(); // []
+y = 3;
+detector.detectNew(); // ['y']
+</code></pre>
+
+<h2>Configurable:</h2>
+
+<p>Gleak comes configured for Node.js and will ignore built-ins by default
+but you can configure it however your like:</p>
+
+<pre><code>var gleak = require('gleak')();
+gleak.ignore(app, db);
+</code></pre>
+
+<p>The <code>gleak.ignore</code> method allows us to add globals we want to ignore
+while safely ignoring duplicates.</p>
+
+<p><code>gleak.whitelist</code> is an array that holds all globals we are ignoring.
+You can push to it or blow it away completely with your own list too.</p>
+
+<pre><code>var gleak = require('gleak')();
+gleak.whitelist = [dnode, cluster];
+</code></pre>
+
+<p>Changes to your whitelists do not impact any global settings. For example:</p>
+
+<pre><code>var gleak = require('gleak');
+var g1 = gleak();
+var g2 = gleak();
+
+g1.ignore(myglobal);
+g2.whitelist.indexOf(myglobal) === -1;
+</code></pre>
+
+<p><code>g2</code> does not inherit changes to <code>g1</code>s whitelist.</p>
+
+<h2>Printable</h2>
+
+<p>If you don't want anything fancy and want to quickly dump all
+global leaks to your console, just call <code>print()</code>.</p>
+
+<pre><code>var gleak = require('gleak')();
+gleak.print(); // prints "Gleak!: leakedVarName"
+</code></pre>
+
+<h2>Expressable</h2>
+
+<p>We might want to print leaked variables to our console after each
+HTTP request. This is especially helpful during development.
+To accomplish this we can utilize the bundled <a href="http://expressjs.com">express</a> middleware:</p>
+
+<pre><code>var app = express.createServer();
+app.use(gleak.middleware());
+</code></pre>
+
+<p>What if we want to output to a different stream than stderr?</p>
+
+<pre><code>app.use(gleak.middleware(stream));
+</code></pre>
+
+<p>How about customized logging formats?
+4 &lt;0.5.0
+    app.use(gleak.middleware('\x1b[31mLeak!\x1b[0m %s'));</p>
+
+<p>Combining formats and streams?</p>
+
+<pre><code>app.use(gleak.middleware(stream, '\x1b[31mLeak!\x1b[0m %s'));
+</code></pre>
+
+<h2>Installable</h2>
+
+<p>npm install gleak</p>
+
+<h3>Node version</h3>
+
+<p>Compatible with Node &gt;=v0.4</p>
+
+<h2>License</h2>
+
+<p>(The MIT License)</p>
+
+<p>Copyright (c) 2011 <a href="aaron.heckmann+github@gmail.com">Aaron Heckmann</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/aheckmann">aheckmann</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-30723428-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
