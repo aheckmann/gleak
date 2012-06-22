@@ -1,8 +1,13 @@
 
 var assert = require('assert')
-var express = require('express')
 var gleak = require('../index')
 var request = require('./_request')
+var express;
+
+// node 4 tests?
+var v = process.version.replace(/^v/,'').split('.');
+if ('0' == v[0] && v[1] > 4)
+  express = require('express')
 
 exports['version exists'] = function () {
   assert.equal('string', typeof gleak.version);
@@ -153,6 +158,7 @@ exports['#detectNew'] = function () {
 }
 
 exports['test middleware'] = function (done) {
+  if ('0' == v[0] && v[1] < 5) return done();
   var called = false;
   var req = {};
   var res = { send: function (x) { assert.equal(x, 'yes'); called = true; }};
