@@ -2,6 +2,7 @@
 var assert = require('assert')
 var express = require('express')
 var gleak = require('../index')
+var request = require('./_request')
 
 exports['version exists'] = function () {
   assert.equal('string', typeof gleak.version);
@@ -151,7 +152,7 @@ exports['#detectNew'] = function () {
   delete global.zombocom;
 }
 
-exports['test middleware'] = function (beforeExit) {
+exports['test middleware'] = function (done) {
   var called = false;
   var req = {};
   var res = { send: function (x) { assert.equal(x, 'yes'); called = true; }};
@@ -197,19 +198,36 @@ exports['test middleware'] = function (beforeExit) {
     res.send('passed format and stream');
   });
 
-  assert.response(app,
-      { url: '/stream' }
-    , { status: 200
-      , body: 'passed a stream' })
+  var pending = 2;
 
-  assert.response(app,
-      { url: '/formatstream' }
-    , { status: 200
-      , body: 'passed format and stream' })
-
-  beforeExit(function () {
-    assert.equal(stream1.i, 2);
-    assert.equal(stream2.i, 2);
+  app.listen(0, function () {
+    request.address = app.address();
+    ready();
   });
+
+  function ready () {
+    request()
+    .get('/stream')
+    .end(function (res) {
+      assert.equal(200, res.statusCode);
+      assert.equal('passed a stream', res.body);
+      assert.equal(2, stream1.i);
+      finish();
+    });
+
+    request()
+    .get('/formatstream')
+    .end(function (res) {
+      assert.equal(200, res.statusCode);
+      assert.equal('passed format and stream', res.body);
+      assert.equal(stream2.i, 2);
+      finish();
+    });
+  }
+
+  function finish () {
+    if (--pending) return;
+    done();
+  }
 }
 
