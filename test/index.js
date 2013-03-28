@@ -48,6 +48,14 @@ exports['clearInterval is a default'] = function () {
   var g = gleak();
   assert.ok(~g.whitelist.indexOf(clearInterval));
 };
+exports['setImmediate is a default'] = function () {
+  var g = gleak();
+  assert.ok(~g.whitelist.indexOf(setImmediate));
+};
+exports['clearImmediate is a default'] = function () {
+  var g = gleak();
+  assert.ok(~g.whitelist.indexOf(clearImmediate));
+};
 exports['console is a default'] = function () {
   var g = gleak();
   assert.ok(~g.whitelist.indexOf(console));

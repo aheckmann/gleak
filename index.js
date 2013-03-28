@@ -84,6 +84,8 @@ Gleak.prototype.whitelist = [
   , setInterval
   , clearTimeout
   , clearInterval
+  , setImmediate
+  , clearImmediate
   , console
   , Buffer
   , process
