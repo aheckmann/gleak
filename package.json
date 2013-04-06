@@ -17,6 +17,5 @@
   "dependencies": {},
   "devDependencies": {
       "express": ">=2.0.0"
-    , "mocha": "*"
   }
 }
