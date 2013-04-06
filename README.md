@@ -88,7 +88,7 @@ Combining formats and streams?
 
 ## Installable
 
-  npm install gleak
+    npm install gleak
 
 ### Node version
 Compatible with Node >=0.4
