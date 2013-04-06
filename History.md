@@ -1,4 +1,12 @@
 
+0.3.0 / 2013-04-06
+==================
+
+  * added; node v0.10 dtrace garbage
+  * added; node v0.10 setImmediate, clearImmediate #5 [jonathanong](https://github.com/onathanong)
+  * tests; handle express 2 or 3
+  * fixed; test for node 0.4.x
+
 0.2.4 / 06-22-2012
 ==================
 
