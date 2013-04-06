@@ -182,7 +182,10 @@ exports['test middleware'] = function (done) {
     }
   }
 
-  var app = express.createServer();
+  var express3 = express.version.split('.')[0] > 2;
+  var app = express3
+    ? express()
+    : express.createServer();
 
   var sout = [
       '\x1b[31mGleak!:\x1b[0m haha\n'
@@ -206,8 +209,8 @@ exports['test middleware'] = function (done) {
 
   var pending = 2;
 
-  app.listen(0, function () {
-    request.address = app.address();
+  var svr = app.listen(0, function () {
+    request.address = svr.address();
     ready();
   });
 
