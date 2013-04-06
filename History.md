@@ -1,4 +1,9 @@
 
+0.4.0 / 2013-04-06
+==================
+
+  * no longer guaranteed compatibility with node 0.4x
+
 0.3.0 / 2013-04-06
 ==================
 
