@@ -114,6 +114,11 @@ if ('0' == version[0]) {
   if (version[1] > 6) {
     Gleak.prototype.whitelist.push(Uint8ClampedArray);
   }
+  // node >= 0.10
+  if(version[0] >= 1 || version[1] >= 10){
+    Gleak.prototype.whitelist.push(setImmediate)
+    Gleak.prototype.whitelist.push(clearImmediate)
+  }
 }
 
 /**
