@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Gleak by aheckmann</title>
-    
+
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -17,15 +17,18 @@
       <header>
         <h1>Gleak</h1>
         <p>Global variable leak detection for Node.js</p>
+
         <p class="view"><a href="https://github.com/aheckmann/gleak">View the Project on GitHub <small>aheckmann/gleak</small></a></p>
+
+
         <ul>
           <li><a href="https://github.com/aheckmann/gleak/zipball/master">Download <strong>ZIP File</strong></a></li>
           <li><a href="https://github.com/aheckmann/gleak/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/aheckmann/gleak">Fork On <strong>GitHub</strong></a></li>
+          <li><a href="https://github.com/aheckmann/gleak">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
       <section>
-        <p><a href="http://travis-ci.org/aheckmann/gleak"><img src="https://secure.travis-ci.org/aheckmann/gleak.png" alt="Build Status"></a></p>
+        <p>Global variable leak detection for Node.js <a href="http://travis-ci.org/aheckmann/gleak"><img src="https://secure.travis-ci.org/aheckmann/gleak.png" alt="Build Status"></a></p>
 
 <pre><code>var detector = require('gleak')();
 
@@ -111,9 +114,10 @@ app.use(gleak.middleware());
 <pre><code>app.use(gleak.middleware(stream));
 </code></pre>
 
-<p>How about customized logging formats?
-4 &lt;0.5.0
-    app.use(gleak.middleware('\x1b[31mLeak!\x1b[0m %s'));</p>
+<p>How about customized logging formats?</p>
+
+<pre><code>app.use(gleak.middleware('\x1b[31mLeak!\x1b[0m %s'));
+</code></pre>
 
 <p>Combining formats and streams?</p>
 
@@ -122,11 +126,14 @@ app.use(gleak.middleware());
 
 <h2>Installable</h2>
 
-<p>npm install gleak</p>
+<pre><code>npm install gleak
+</code></pre>
 
 <h3>Node version</h3>
 
-<p>Compatible with Node &gt;=v0.4</p>
+<p>Compatible with Node &gt;=0.6</p>
+
+<p>Node &gt;= 0.4.1 probably still works too but the tests no longer confirm it.</p>
 
 <h2>License</h2>
 
