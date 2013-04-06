@@ -77,6 +77,17 @@ function Gleak () {
  * @api public
  */
 
+var dtraceLeaks = [
+    'DTRACE_NET_SERVER_CONNECTION'
+  , 'DTRACE_NET_STREAM_END'
+  , 'DTRACE_NET_SOCKET_READ'
+  , 'DTRACE_NET_SOCKET_WRITE'
+  , 'DTRACE_HTTP_SERVER_REQUEST'
+  , 'DTRACE_HTTP_SERVER_RESPONSE'
+  , 'DTRACE_HTTP_CLIENT_REQUEST'
+  , 'DTRACE_HTTP_CLIENT_RESPONSE'
+]
+
 // v0.4.x
 Gleak.prototype.whitelist = [
     setTimeout
@@ -116,6 +127,10 @@ if ('0' == version[0]) {
 
   if (version[1] > 8) {
     Gleak.prototype.whitelist.push(setImmediate, clearImmediate);
+    dtraceLeaks.forEach(function (leak) {
+      if ('undefined' != typeof global[leak])
+        Gleak.prototype.whitelist.push(global[leak]);
+    })
   }
 }
 
