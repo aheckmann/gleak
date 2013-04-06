@@ -1,4 +1,3 @@
-
 /**
  * Gleak - detect global var leaks.
  * @api public
@@ -113,6 +112,10 @@ if ('0' == version[0]) {
 
   if (version[1] > 6) {
     Gleak.prototype.whitelist.push(Uint8ClampedArray);
+  }
+  
+  if (version[1] > 8) {
+    Gleak.prototype.whitelist.push(setImmediate, clearImmediate);
   }
 }
 
