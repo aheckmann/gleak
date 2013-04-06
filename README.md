@@ -91,7 +91,9 @@ Combining formats and streams?
     npm install gleak
 
 ### Node version
-Compatible with Node >=0.4
+Compatible with Node >=0.6
+
+Node >= 0.4.1 probably still works too but the tests no longer confirm it.
 
 ## License
 
