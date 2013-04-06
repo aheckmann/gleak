@@ -1,6 +1,6 @@
 # Gleak
 
-Global variable leak detection for Node.js [![Build Status](https://secure.travis-ci.org/aheckmann/gleak.png)](http://travis-ci.org/aheckmann/gleak)
+Global variable leak detection for Node.js [![Build Status](https://travis-ci.org/aheckmann/gleak.png?branch=master)](https://travis-ci.org/aheckmann/gleak)
 
     var detector = require('gleak')();
 
