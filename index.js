@@ -88,6 +88,15 @@ var dtraceLeaks = [
   , 'DTRACE_HTTP_CLIENT_RESPONSE'
 ]
 
+var countersLeaks = [
+    'COUNTER_NET_SERVER_CONNECTION'
+  , 'COUNTER_NET_SERVER_CONNECTION_CLOSE'
+  , 'COUNTER_HTTP_SERVER_REQUEST'
+  , 'COUNTER_HTTP_SERVER_RESPONSE'
+  , 'COUNTER_HTTP_CLIENT_REQUEST'
+  , 'COUNTER_HTTP_CLIENT_RESPONSE'
+]
+
 // v0.4.x
 Gleak.prototype.whitelist = [
     setTimeout
@@ -104,6 +113,7 @@ Gleak.prototype.whitelist = [
 
 // check for new globals in >= v0.5x
 var version = process.version.replace(/^v/, '').split('.');
+
 if ('0' == version[0]) {
   if (version[1] > 4 && process.version != 'v0.5.0-pre') {
     Gleak.prototype.whitelist.push(
@@ -125,9 +135,16 @@ if ('0' == version[0]) {
     Gleak.prototype.whitelist.push(Uint8ClampedArray);
   }
 
+  if (version[1] >= 8) {
+    dtraceLeaks.forEach(function (leak) {
+      if ('undefined' != typeof global[leak])
+        Gleak.prototype.whitelist.push(global[leak]);
+    })
+  }
+
   if (version[1] > 8) {
     Gleak.prototype.whitelist.push(setImmediate, clearImmediate);
-    dtraceLeaks.forEach(function (leak) {
+    countersLeaks.forEach(function (leak) {
       if ('undefined' != typeof global[leak])
         Gleak.prototype.whitelist.push(global[leak]);
     })
