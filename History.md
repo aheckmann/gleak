@@ -1,4 +1,10 @@
 
+0.5.0 / 2013-09-12
+==================
+
+ * whitelist some globals under Windows for node >=v0.8.x #6 [yannickcr](https://github.com/yannickcr)
+ * update travis img
+
 0.4.0 / 2013-04-06
 ==================
 
