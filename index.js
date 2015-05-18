@@ -109,6 +109,9 @@ Gleak.prototype.whitelist = [
   , global
   , GLOBAL
   , root
+// io.js
+  , clearImmediate
+  , setImmediate
 ];
 
 // check for new globals in >= v0.5x
